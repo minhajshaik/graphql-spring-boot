@@ -8,5 +8,5 @@ dependencies {
     testImplementation "com.graphql-java:graphql-java:$LIB_GRAPHQL_JAVA_VER"
     testImplementation "org.springframework.boot:spring-boot-starter-web"
     testImplementation "org.springframework.boot:spring-boot-starter-test"
-    testImplementation(project(":graphql-spring-boot-test"))
+    testImplementation(project(':graphql-spring-boot-test'))
 }
