@@ -12,6 +12,7 @@ addSuffix() {
 }
 
 updateLocalDependencies() {
+  sed -i "s/graphql-spring-boot-dependencies/graphql-spring-boot-dependencies-${MODULE_SUFFIX}/" build.gradle
   for module in "${modules[@]}"; do
     cp -rf "$module" "$module"-"$MODULE_SUFFIX"
     rm -rf "$module"
