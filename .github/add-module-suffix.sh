@@ -4,7 +4,7 @@ MODULE_SUFFIX="${GITHUB_REF##*/}"
 
 addSuffix() {
   local result
-  result=$(grep include settings.gradle | awk '{print $2}' | tr -d "'" | tr -d ':')
+  result=$(grep include settings.gradle | awk '{print $2}' | tr -d "'" | tr -d '"' | tr -d ':')
   readarray -t <<<"$result"
   modules=("${MAPFILE[@]}")
 
