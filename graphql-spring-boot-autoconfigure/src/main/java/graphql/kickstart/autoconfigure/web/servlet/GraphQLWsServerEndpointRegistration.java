@@ -19,6 +19,11 @@ public class GraphQLWsServerEndpointRegistration extends ServerEndpointRegistrat
   }
 
   @Override
+  public boolean checkOrigin(String originHeaderValue) {
+    return servlet.checkOrigin(originHeaderValue);
+  }
+
+  @Override
   public void modifyHandshake(
       ServerEndpointConfig sec, HandshakeRequest request, HandshakeResponse response) {
     super.modifyHandshake(sec, request, response);

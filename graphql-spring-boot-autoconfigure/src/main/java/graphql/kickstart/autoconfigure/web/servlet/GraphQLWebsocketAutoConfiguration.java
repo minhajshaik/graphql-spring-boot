@@ -35,7 +35,6 @@ import org.springframework.web.socket.server.standard.ServerEndpointRegistration
 @ConditionalOnWebApplication(type = Type.SERVLET)
 @ConditionalOnClass({DispatcherServlet.class, ServerEndpointRegistration.class})
 @Conditional(OnSchemaOrSchemaProviderBean.class)
-@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 @ConditionalOnProperty(
     value = "graphql.servlet.websocket.enabled",
     havingValue = "true",
@@ -63,7 +62,11 @@ public class GraphQLWebsocketAutoConfiguration {
     }
     keepAliveListener().ifPresent(listeners::add);
     return new GraphQLWebsocketServlet(
-        graphQLInvoker, invocationInputFactory, graphQLObjectMapper, listeners);
+        graphQLInvoker,
+        invocationInputFactory,
+        graphQLObjectMapper,
+        listeners,
+        websocketProperties.getAllowedOrigins());
   }
 
   private Optional<SubscriptionConnectionListener> keepAliveListener() {
