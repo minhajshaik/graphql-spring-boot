@@ -1,9 +1,9 @@
-name: ci
+name: "Publish snapshot with suffix"
 on:
   push:
     branches:
-      - master
-      - release/**
+      - javax
+      - jakarta
 
 jobs:
   validation:
@@ -23,12 +23,12 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v3
         with:
-          distribution: 'temurin'
-          java-version: 8
+          distribution: 'zulu'
+          java-version: 11
       - name: Cache Gradle
         uses: actions/cache@v3
         env:
-          java-version: 8
+          java-version: 11
         with:
           path: |
             ~/.gradle/caches
@@ -51,12 +51,12 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v3
         with:
-          distribution: 'temurin'
-          java-version: 8
+          distribution: 'zulu'
+          java-version: 11
       - name: Cache Gradle
         uses: actions/cache@v3
         env:
-          java-version: 8
+          java-version: 11
         with:
           path: |
             ~/.gradle/caches
@@ -64,43 +64,11 @@ jobs:
           key: ${{ runner.os }}-${{ env.java-version }}-gradle-${{ hashFiles('**/*.gradle*') }}
           restore-keys: |
             ${{ runner.os }}-${{ env.java-version }}-gradle-
-      - name: Make gradlew executable
-        run: chmod +x ./gradlew
+      - name: Add suffix to modules
+        run: .github/add-module-suffix.sh
       - name: Gradle Publish Snapshot
         if: env.OSS_USER_TOKEN_KEY != null
         env:
           OSS_USER_TOKEN_KEY: ${{ secrets.OSS_USER_TOKEN_KEY }}
           OSS_USER_TOKEN_PASS: ${{ secrets.OSS_USER_TOKEN_PASS }}
         run: ./gradlew clean build publish -x test
-
-  sonar:
-    name: Sonar analysis
-    needs: validation
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-      - name: Set up JDK 11
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          java-version: 11
-      - name: Cache SonarCloud packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.sonar/cache
-          key: ${{ runner.os }}-sonar
-          restore-keys: ${{ runner.os }}-sonar
-      - name: Cache Gradle packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
-          restore-keys: ${{ runner.os }}-gradle
-      - name: Build and analyze
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        if: env.SONAR_TOKEN != null
-        run: ./gradlew build jacocoTestReport sonarqube --info
