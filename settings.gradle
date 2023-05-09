@@ -11,7 +11,7 @@ rootProject.name = PROJECT_NAME
 include ":graphql-spring-boot-autoconfigure"
 include ":graphql-spring-boot-starter"
 
-include ':graphql-spring-boot-dependencies'
+//include ':graphql-spring-boot-dependencies'
 
 include ':graphql-kickstart-spring-support'
 include ':graphql-kickstart-spring-webflux'

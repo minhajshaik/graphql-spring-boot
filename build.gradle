@@ -35,7 +35,7 @@ sonarqube {
     }
 }
 
-def bomProjectName = "graphql-spring-boot-dependencies"
+//def bomProjectName = "graphql-spring-boot-dependencies"
 
 subprojects {
     apply plugin: 'idea'
