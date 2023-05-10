@@ -15,6 +15,7 @@ class GraphQLSubscriptionWebsocketProperties {
   private CsrfProperties csrf = new CsrfProperties();
 
   @Data
+  static
   class CsrfProperties {
 
     private boolean enabled = false;
