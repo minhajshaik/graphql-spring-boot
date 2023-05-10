@@ -42,4 +42,16 @@ class GraphQLWsServerEndpointRegistrationTest {
     var allowed = registration.checkOrigin(originToCheck);
     assertThat(allowed).isTrue();
   }
+
+  @ParameterizedTest(name = "{index} => allowedOrigin=''{0}'', originToCheck=''{1}''")
+  @CsvSource(delimiterString = "|", textBlock = """
+    https://trusted.com  | ''
+    https://trusted.com  | https://evil.com
+    https://trusted.com  | https://trusted.nl
+""")
+  void givenAllowedOrigins_whenCheckEvilOrigin_thenReturnFalse(String allowedOrigin, String originToCheck) {
+    var registration = createRegistration(allowedOrigin);
+    var allowed = registration.checkOrigin(originToCheck);
+    assertThat(allowed).isFalse();
+  }
 }
