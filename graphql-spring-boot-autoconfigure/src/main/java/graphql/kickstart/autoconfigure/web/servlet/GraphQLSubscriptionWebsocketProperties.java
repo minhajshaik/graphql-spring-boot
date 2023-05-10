@@ -12,4 +12,11 @@ class GraphQLSubscriptionWebsocketProperties {
 
   private String path = "/subscriptions";
   private List<String> allowedOrigins = emptyList();
+  private CsrfProperties csrf = new CsrfProperties();
+
+  @Data
+  class CsrfProperties {
+
+    private boolean enabled = false;
+  }
 }

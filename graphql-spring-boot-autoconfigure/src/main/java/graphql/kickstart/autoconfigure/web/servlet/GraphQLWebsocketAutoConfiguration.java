@@ -81,7 +81,7 @@ public class GraphQLWebsocketAutoConfiguration {
   @Bean
   public WsCsrfFilter wsCsrfFilter(
       @Autowired(required = false) WsCsrfTokenRepository csrfTokenRepository) {
-    return new WsCsrfFilter(csrfTokenRepository);
+    return new WsCsrfFilter(websocketProperties.getCsrf(), csrfTokenRepository);
   }
 
   @Bean
