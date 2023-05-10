@@ -63,10 +63,7 @@ public class GraphQLWebsocketAutoConfiguration {
     }
     keepAliveListener().ifPresent(listeners::add);
     return new GraphQLWebsocketServlet(
-        graphQLInvoker,
-        invocationInputFactory,
-        graphQLObjectMapper,
-        listeners);
+        graphQLInvoker, invocationInputFactory, graphQLObjectMapper, listeners);
   }
 
   private Optional<SubscriptionConnectionListener> keepAliveListener() {

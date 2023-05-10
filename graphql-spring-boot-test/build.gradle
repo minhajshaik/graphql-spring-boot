@@ -17,6 +17,9 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 dependencies {
+    compileOnly 'jakarta.servlet:jakarta.servlet-api:6.0.0'
+    compileOnly 'jakarta.websocket:jakarta.websocket-api:2.1.0'
+    compileOnly 'jakarta.websocket:jakarta.websocket-client-api:2.1.0'
     implementation "org.springframework:spring-web"
     implementation "org.springframework.boot:spring-boot-starter-test"
     implementation "com.fasterxml.jackson.core:jackson-databind"
