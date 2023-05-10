@@ -1,6 +1,7 @@
 package graphql.kickstart.autoconfigure.web.servlet;
 
 import graphql.kickstart.servlet.GraphQLWebsocketServlet;
+import java.util.ArrayList;
 import java.util.List;
 import javax.websocket.HandshakeResponse;
 import javax.websocket.server.HandshakeRequest;
@@ -14,6 +15,7 @@ import org.springframework.web.socket.server.standard.ServerEndpointRegistration
 public class GraphQLWsServerEndpointRegistration extends ServerEndpointRegistration
     implements Lifecycle {
 
+  private static final String ALL = "*";
   private final GraphQLWebsocketServlet servlet;
   private final List<String> allowedOrigins;
 
@@ -21,24 +23,25 @@ public class GraphQLWsServerEndpointRegistration extends ServerEndpointRegistrat
       String path, GraphQLWebsocketServlet servlet, List<String> allowedOrigins) {
     super(path, servlet);
     this.servlet = servlet;
-    this.allowedOrigins = allowedOrigins;
+    if (allowedOrigins == null || allowedOrigins.isEmpty()) {
+      this.allowedOrigins = List.of(ALL);
+    } else {
+      this.allowedOrigins = new ArrayList<>(allowedOrigins);
+    }
   }
 
   @Override
   public boolean checkOrigin(String originHeaderValue) {
     if (originHeaderValue == null || originHeaderValue.isBlank()) {
-      return allowedOrigins.isEmpty();
+      return allowedOrigins.contains(ALL);
+    }
+    if (allowedOrigins.contains(ALL)) {
+      return true;
     }
     String originToCheck = trimTrailingSlash(originHeaderValue);
-    if (!allowedOrigins.isEmpty()) {
-      if (allowedOrigins.contains("*")) {
-        return true;
-      }
-      return allowedOrigins.stream()
-          .map(this::trimTrailingSlash)
-          .anyMatch(originToCheck::equalsIgnoreCase);
-    }
-    return true;
+    return allowedOrigins.stream()
+        .map(this::trimTrailingSlash)
+        .anyMatch(originToCheck::equalsIgnoreCase);
   }
 
   private String trimTrailingSlash(String origin) {

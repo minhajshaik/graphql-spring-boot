@@ -1,11 +1,9 @@
 package graphql.kickstart.autoconfigure.web.servlet;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 import graphql.kickstart.servlet.GraphQLWebsocketServlet;
 import java.util.List;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -37,6 +35,7 @@ class GraphQLWsServerEndpointRegistrationTest {
     https://trusted.com  | https://trusted.com
     https://trusted.com/ | https://trusted.com
     https://trusted.com/ | https://trusted.com/
+    https://trusted.com  | https://trusted.com/
 """)
   void givenAllowedOrigins_whenCheckOrigin_thenReturnTrue(String allowedOrigin, String originToCheck) {
     var registration = createRegistration(allowedOrigin);
