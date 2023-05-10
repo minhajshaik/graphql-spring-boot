@@ -65,8 +65,7 @@ public class GraphQLWebsocketAutoConfiguration {
         graphQLInvoker,
         invocationInputFactory,
         graphQLObjectMapper,
-        listeners,
-        websocketProperties.getAllowedOrigins());
+        listeners);
   }
 
   private Optional<SubscriptionConnectionListener> keepAliveListener() {
