@@ -18,9 +18,10 @@ public class GraphQLWsServerEndpointRegistration extends ServerEndpointRegistrat
   private static final String ALL = "*";
   private final GraphQLWebsocketServlet servlet;
   private final List<String> allowedOrigins;
+  private final WsCsrfFilter csrfFilter;
 
   public GraphQLWsServerEndpointRegistration(
-      String path, GraphQLWebsocketServlet servlet, List<String> allowedOrigins) {
+      String path, GraphQLWebsocketServlet servlet, List<String> allowedOrigins, , WsCsrfFilter csrfFilter) {
     super(path, servlet);
     this.servlet = servlet;
     if (allowedOrigins == null || allowedOrigins.isEmpty()) {
@@ -28,6 +29,7 @@ public class GraphQLWsServerEndpointRegistration extends ServerEndpointRegistrat
     } else {
       this.allowedOrigins = new ArrayList<>(allowedOrigins);
     }
+    this.csrfFilter = csrfFilter;
   }
 
   @Override
@@ -52,6 +54,7 @@ public class GraphQLWsServerEndpointRegistration extends ServerEndpointRegistrat
   public void modifyHandshake(
       ServerEndpointConfig sec, HandshakeRequest request, HandshakeResponse response) {
     super.modifyHandshake(sec, request, response);
+    csrfFilter.doFilter(request);
     servlet.modifyHandshake(sec, request, response);
   }
 
