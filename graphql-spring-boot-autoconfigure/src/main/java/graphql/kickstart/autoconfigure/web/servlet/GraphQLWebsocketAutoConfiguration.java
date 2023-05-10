@@ -81,7 +81,8 @@ public class GraphQLWebsocketAutoConfiguration {
   @Bean
   @ConditionalOnClass(ServerContainer.class)
   public ServerEndpointRegistration serverEndpointRegistration(GraphQLWebsocketServlet servlet) {
-    return new GraphQLWsServerEndpointRegistration(websocketProperties.getPath(), servlet);
+    return new GraphQLWsServerEndpointRegistration(
+        websocketProperties.getPath(), servlet, websocketProperties.getAllowedOrigins());
   }
 
   @Bean
