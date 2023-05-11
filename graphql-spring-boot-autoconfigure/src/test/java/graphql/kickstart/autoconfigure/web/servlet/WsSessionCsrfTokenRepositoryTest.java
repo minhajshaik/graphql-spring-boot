@@ -5,9 +5,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import jakarta.servlet.http.HttpSession;
-import jakarta.websocket.server.HandshakeRequest;
 import java.util.UUID;
+import javax.servlet.http.HttpSession;
+import javax.websocket.server.HandshakeRequest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
