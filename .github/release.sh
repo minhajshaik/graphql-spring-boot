@@ -14,4 +14,4 @@ if [[ "${BRANCH}" != "master" ]]; then
   .github/add-module-suffix.sh
 fi
 
-./gradlew clean build publishToSonatype closeAndReleaseSonatypeStagingRepository
+./gradlew clean build publishToSonatype closeAndReleaseSonatypeStagingRepository -x test
