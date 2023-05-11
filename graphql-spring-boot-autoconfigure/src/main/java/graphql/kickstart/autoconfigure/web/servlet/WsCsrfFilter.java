@@ -6,6 +6,7 @@ import graphql.kickstart.autoconfigure.web.servlet.GraphQLSubscriptionWebsocketP
 import java.util.Objects;
 import javax.websocket.server.HandshakeRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.csrf.CsrfToken;
 
 @RequiredArgsConstructor
@@ -26,7 +27,7 @@ class WsCsrfFilter {
       String actualToken =
           firstElement(request.getParameterMap().get(csrfToken.getParameterName()));
       if (!Objects.equals(csrfToken.getToken(), actualToken)) {
-        throw new IllegalStateException(
+        throw new AccessDeniedException(
             "Invalid CSRF Token '"
                 + actualToken
                 + "' was found on the request parameter '"
