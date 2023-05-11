@@ -2,8 +2,8 @@ package graphql.kickstart.autoconfigure.web.servlet;
 
 import static org.springframework.util.CollectionUtils.firstElement;
 
-import jakarta.websocket.server.HandshakeRequest;
 import java.util.Objects;
+import javax.websocket.server.HandshakeRequest;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor

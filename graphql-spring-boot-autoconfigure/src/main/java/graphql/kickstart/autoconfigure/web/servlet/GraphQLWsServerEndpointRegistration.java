@@ -21,7 +21,7 @@ public class GraphQLWsServerEndpointRegistration extends ServerEndpointRegistrat
   private final WsCsrfFilter csrfFilter;
 
   public GraphQLWsServerEndpointRegistration(
-      String path, GraphQLWebsocketServlet servlet, List<String> allowedOrigins, , WsCsrfFilter csrfFilter) {
+      String path, GraphQLWebsocketServlet servlet, List<String> allowedOrigins, WsCsrfFilter csrfFilter) {
     super(path, servlet);
     this.servlet = servlet;
     if (allowedOrigins == null || allowedOrigins.isEmpty()) {

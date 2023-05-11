@@ -16,9 +16,12 @@ class GraphQLWsServerEndpointRegistrationTest {
   private static final String PATH = "/subscriptions";
 
   @Mock private GraphQLWebsocketServlet servlet;
+  @Mock private WsCsrfFilter csrfFilter;
 
   @ParameterizedTest
-  @CsvSource(value = {"https://trusted.com", "NULL", "' '"}, nullValues = {"NULL"})
+  @CsvSource(
+      value = {"https://trusted.com", "NULL", "' '"},
+      nullValues = {"NULL"})
   void givenDefaultAllowedOrigins_whenCheckOrigin_thenReturnTrue(String origin) {
     var registration = createRegistration();
     var allowed = registration.checkOrigin("null".equals(origin) ? null : origin);
@@ -26,30 +29,39 @@ class GraphQLWsServerEndpointRegistrationTest {
   }
 
   private GraphQLWsServerEndpointRegistration createRegistration(String... allowedOrigins) {
-    return new GraphQLWsServerEndpointRegistration(PATH, servlet, List.of(allowedOrigins));
+    return new GraphQLWsServerEndpointRegistration(
+        PATH, servlet, List.of(allowedOrigins), csrfFilter);
   }
 
   @ParameterizedTest(name = "{index} => allowedOrigin=''{0}'', originToCheck=''{1}''")
-  @CsvSource(delimiterString = "|", textBlock = """
+  @CsvSource(
+      delimiterString = "|",
+      textBlock =
+          """
     *                    | https://trusted.com
     https://trusted.com  | https://trusted.com
     https://trusted.com/ | https://trusted.com
     https://trusted.com/ | https://trusted.com/
     https://trusted.com  | https://trusted.com/
 """)
-  void givenAllowedOrigins_whenCheckOrigin_thenReturnTrue(String allowedOrigin, String originToCheck) {
+  void givenAllowedOrigins_whenCheckOrigin_thenReturnTrue(
+      String allowedOrigin, String originToCheck) {
     var registration = createRegistration(allowedOrigin);
     var allowed = registration.checkOrigin(originToCheck);
     assertThat(allowed).isTrue();
   }
 
   @ParameterizedTest(name = "{index} => allowedOrigin=''{0}'', originToCheck=''{1}''")
-  @CsvSource(delimiterString = "|", textBlock = """
+  @CsvSource(
+      delimiterString = "|",
+      textBlock =
+          """
     https://trusted.com  | ''
     https://trusted.com  | https://evil.com
     https://trusted.com  | https://trusted.nl
 """)
-  void givenAllowedOrigins_whenCheckEvilOrigin_thenReturnFalse(String allowedOrigin, String originToCheck) {
+  void givenAllowedOrigins_whenCheckEvilOrigin_thenReturnFalse(
+      String allowedOrigin, String originToCheck) {
     var registration = createRegistration(allowedOrigin);
     var allowed = registration.checkOrigin(originToCheck);
     assertThat(allowed).isFalse();

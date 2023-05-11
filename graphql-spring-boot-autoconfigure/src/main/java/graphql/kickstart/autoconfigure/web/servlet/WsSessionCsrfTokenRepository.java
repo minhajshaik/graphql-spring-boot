@@ -1,8 +1,8 @@
 package graphql.kickstart.autoconfigure.web.servlet;
 
-import jakarta.servlet.http.HttpSession;
-import jakarta.websocket.server.HandshakeRequest;
 import java.util.UUID;
+import javax.servlet.http.HttpSession;
+import javax.websocket.server.HandshakeRequest;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 
 class WsSessionCsrfTokenRepository implements WsCsrfTokenRepository {
