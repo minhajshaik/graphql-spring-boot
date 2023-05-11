@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.security.web.csrf.DefaultCsrfToken;
 
@@ -67,7 +68,7 @@ class WsCsrfFilterTest {
 
     WsCsrfFilter filter = new WsCsrfFilter(csrfProperties, tokenRepository);
     assertThatThrownBy(() -> filter.doFilter(handshakeRequest))
-        .isInstanceOf(IllegalStateException.class)
+        .isInstanceOf(AccessDeniedException.class)
         .hasMessage(
             "Invalid CSRF Token 'different-token' was found on the request parameter '_csrf'.");
   }
