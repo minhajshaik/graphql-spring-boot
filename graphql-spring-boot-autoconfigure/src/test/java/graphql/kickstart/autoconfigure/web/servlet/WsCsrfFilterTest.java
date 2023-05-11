@@ -16,6 +16,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.web.csrf.CsrfToken;
+import org.springframework.security.web.csrf.DefaultCsrfToken;
 
 @ExtendWith(MockitoExtension.class)
 class WsCsrfFilterTest {
@@ -46,7 +48,7 @@ class WsCsrfFilterTest {
   void givenNoTokenInSession_whenDoFilter_thenGenerateAndSaveToken() {
     csrfProperties.setEnabled(true);
     when(tokenRepository.loadToken(handshakeRequest)).thenReturn(null);
-    WsCsrfToken csrfToken = mock(WsCsrfToken.class);
+    CsrfToken csrfToken = mock(CsrfToken.class);
     when(tokenRepository.generateToken(handshakeRequest)).thenReturn(csrfToken);
 
     WsCsrfFilter filter = new WsCsrfFilter(csrfProperties, tokenRepository);
@@ -58,7 +60,7 @@ class WsCsrfFilterTest {
   @Test
   void givenDifferentActualToken_whenDoFilter_thenThrowsException() {
     csrfProperties.setEnabled(true);
-    WsCsrfToken csrfToken = new DefaultWsCsrfToken("some-token", "_csrf");
+    CsrfToken csrfToken = new DefaultCsrfToken("X-CSRF-TOKEN", "_csrf", "some-token");
     when(tokenRepository.loadToken(handshakeRequest)).thenReturn(csrfToken);
     when(handshakeRequest.getParameterMap())
         .thenReturn(Map.of("_csrf", List.of("different-token")));
@@ -73,10 +75,9 @@ class WsCsrfFilterTest {
   @Test
   void givenSameToken_whenDoFilter_thenDoesNotThrow() {
     csrfProperties.setEnabled(true);
-    WsCsrfToken csrfToken = new DefaultWsCsrfToken("some-token", "_csrf");
+    CsrfToken csrfToken = new DefaultCsrfToken("X-CSRF-TOKEN", "_csrf", "some-token");
     when(tokenRepository.loadToken(handshakeRequest)).thenReturn(csrfToken);
-    when(handshakeRequest.getParameterMap())
-        .thenReturn(Map.of("_csrf", List.of("some-token")));
+    when(handshakeRequest.getParameterMap()).thenReturn(Map.of("_csrf", List.of("some-token")));
 
     WsCsrfFilter filter = new WsCsrfFilter(csrfProperties, tokenRepository);
     assertDoesNotThrow(() -> filter.doFilter(handshakeRequest));

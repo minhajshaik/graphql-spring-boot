@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.web.csrf.CsrfToken;
 
 @ExtendWith(MockitoExtension.class)
 class WsSessionCsrfTokenRepositoryTest {
@@ -20,7 +21,7 @@ class WsSessionCsrfTokenRepositoryTest {
       "org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository.CSRF_TOKEN";
   @Mock private HandshakeRequest handshakeRequest;
   @Mock private HttpSession httpSession;
-  @Mock private WsCsrfToken csrfToken;
+  @Mock private CsrfToken csrfToken;
   private WsSessionCsrfTokenRepository tokenRepository = new WsSessionCsrfTokenRepository();
 
   @Test
@@ -46,7 +47,7 @@ class WsSessionCsrfTokenRepositoryTest {
   @Test
   void givenNoSession_whenLoadToken_thenReturnNull() {
     when(handshakeRequest.getHttpSession()).thenReturn(null);
-    WsCsrfToken csrfToken = tokenRepository.loadToken(handshakeRequest);
+    CsrfToken csrfToken = tokenRepository.loadToken(handshakeRequest);
     assertThat(csrfToken).isNull();
   }
 
@@ -54,7 +55,7 @@ class WsSessionCsrfTokenRepositoryTest {
   void givenTokenInSession_whenLoadToken_thenReturnTokenFromSession() {
     when(handshakeRequest.getHttpSession()).thenReturn(httpSession);
     when(httpSession.getAttribute(TOKEN_SESSION_ATTRIBUTE_NAME)).thenReturn(csrfToken);
-    WsCsrfToken loadedToken = tokenRepository.loadToken(handshakeRequest);
+    CsrfToken loadedToken = tokenRepository.loadToken(handshakeRequest);
     assertThat(loadedToken).isEqualTo(csrfToken);
   }
 

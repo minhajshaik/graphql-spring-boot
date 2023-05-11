@@ -6,6 +6,7 @@ import graphql.kickstart.autoconfigure.web.servlet.GraphQLSubscriptionWebsocketP
 import java.util.Objects;
 import javax.websocket.server.HandshakeRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.web.csrf.CsrfToken;
 
 @RequiredArgsConstructor
 class WsCsrfFilter {
@@ -15,7 +16,7 @@ class WsCsrfFilter {
 
   void doFilter(HandshakeRequest request) {
     if (csrfProperties.isEnabled() && tokenRepository != null) {
-      WsCsrfToken csrfToken = tokenRepository.loadToken(request);
+      CsrfToken csrfToken = tokenRepository.loadToken(request);
       boolean missingToken = csrfToken == null;
       if (missingToken) {
         csrfToken = tokenRepository.generateToken(request);

@@ -3,6 +3,8 @@ package graphql.kickstart.autoconfigure.web.servlet;
 import java.util.UUID;
 import javax.servlet.http.HttpSession;
 import javax.websocket.server.HandshakeRequest;
+import org.springframework.security.web.csrf.CsrfToken;
+import org.springframework.security.web.csrf.DefaultCsrfToken;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 
 class WsSessionCsrfTokenRepository implements WsCsrfTokenRepository {
@@ -15,7 +17,7 @@ class WsSessionCsrfTokenRepository implements WsCsrfTokenRepository {
   private String sessionAttributeName = DEFAULT_CSRF_TOKEN_ATTR_NAME;
 
   @Override
-  public void saveToken(WsCsrfToken token, HandshakeRequest request) {
+  public void saveToken(CsrfToken token, HandshakeRequest request) {
     HttpSession session = (HttpSession) request.getHttpSession();
     if (session != null) {
       if (token == null) {
@@ -27,16 +29,17 @@ class WsSessionCsrfTokenRepository implements WsCsrfTokenRepository {
   }
 
   @Override
-  public WsCsrfToken loadToken(HandshakeRequest request) {
+  public CsrfToken loadToken(HandshakeRequest request) {
     HttpSession session = (HttpSession) request.getHttpSession();
     if (session == null) {
       return null;
     }
-    return (WsCsrfToken) session.getAttribute(this.sessionAttributeName);
+    return (CsrfToken) session.getAttribute(this.sessionAttributeName);
   }
 
   @Override
-  public WsCsrfToken generateToken(HandshakeRequest request) {
-    return new DefaultWsCsrfToken(UUID.randomUUID().toString(), DEFAULT_CSRF_PARAMETER_NAME);
+  public CsrfToken generateToken(HandshakeRequest request) {
+    return new DefaultCsrfToken(
+        "X-CSRF-TOKEN", DEFAULT_CSRF_PARAMETER_NAME, UUID.randomUUID().toString());
   }
 }
